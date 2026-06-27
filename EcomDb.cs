@@ -2,7 +2,11 @@ using Microsoft.EntityFrameworkCore;
 
 class EcomDb : DbContext
 {
-    public EcomDb(DbContextOptions<Shiftdb> options) : base(options) { }
+    public EcomDb(DbContextOptions<EcomDb> options) : base(options) { }
 
-    public DbSet<Shift> Shifts => Set<Shift>();
+    public DbSet<Sale> Sales => Set<Sale>();
+
+    public DbSet<Product> Products => Set<Product>();
+
+    public DbSet<Category> Categories => Set<Category>();
 }
