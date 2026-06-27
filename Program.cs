@@ -67,6 +67,8 @@ app.MapPost("/products/", async (EcomDb db, Product prod) =>
     db.Products.Add(prod);
     await db.SaveChangesAsync();
 
+    .wh
+
     return TypedResults.Created($"/Products/{prod.Id}", prod);
 });
 
@@ -83,7 +85,8 @@ app.MapPut("/products/{id}", async Task<Results<Ok<Product>, NotFound>> (EcomDb 
         // Update what we are allowed to 
         targetProduct.Amt = newProd.Amt;
         targetProduct.Name = newProd.Name;
-        targetProduct.Category = newProd.Category;
+        targetProduct.CategoryId = newProd.CategoryId; 
+
 
         await db.SaveChangesAsync();
 
@@ -217,6 +220,7 @@ app.MapGet("/categories/", async (EcomDb db, int page=1, int pageSize=10 ) =>
     return TypedResults.Ok();
 }
 );
+
 // Get a specific category by Id
 app.MapGet("/categories/{id}", async Task<Results<Ok<Category>, NotFound>> (EcomDb db, int id) =>
 {
@@ -231,8 +235,31 @@ app.MapGet("/categories/{id}", async Task<Results<Ok<Category>, NotFound>> (Ecom
 });
 
 // POST or create a category
+app.MapPost("/category/", async (EcomDb db, Category cat) =>
+{
+    db.Categories.Add(cat);
+    await db.SaveChangesAsync();
+
+    return TypedResults.Created($"/Products/{cat.Id}", cat);
+});
 
 // PUT or update a category
+app.MapPut("/category/{id}", async Task<Results<Ok<Category>, NotFound>> (EcomDb db, Category newCat, int id) =>
+{
+    var targetCat = await db.Categories.FindAsync(id);
+
+    if (targetCat == null) {
+        return TypedResults.NotFound();
+    } else
+    {
+        // Update what we are allowed to 
+        targetCat.Name = newCat.Name;
+
+        await db.SaveChangesAsync();
+
+        return TypedResults.Ok(targetCat);
+    }
+});
 
 // DELETE a category
 app.MapDelete("/categories/{id}", async Task<Results<NoContent, NotFound>> (EcomDb db, int id) =>
