@@ -9,5 +9,5 @@ public class Sale
 
     public int CardType{get; set;}
 
-    public bool IsDeleted{get; set;}
+    public bool IsDeleted{get; set;} = false;
 }

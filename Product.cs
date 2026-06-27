@@ -14,7 +14,7 @@ public class Product
     public decimal Price{get; set;}
 
     // soft delete
-    public bool IsDeleted{get; set;}
+    public bool IsDeleted{get; set;} = false;
 
     // foreign key
     public int CategoryId { get; set; }       
