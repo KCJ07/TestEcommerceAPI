@@ -67,8 +67,6 @@ app.MapPost("/products/", async (EcomDb db, Product prod) =>
     db.Products.Add(prod);
     await db.SaveChangesAsync();
 
-    .wh
-
     return TypedResults.Created($"/Products/{prod.Id}", prod);
 });
 
@@ -275,98 +273,3 @@ app.MapDelete("/categories/{id}", async Task<Results<NoContent, NotFound>> (Ecom
         return TypedResults.NoContent();
     }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// GET endpoint on parent directory should return list of Shifts 
-app.MapGet("/shifts/", async (EcomDb db) => 
-    await db.Shifts.ToListAsync());
-
-// GET endpoint gets specific shift object 
-app.MapGet("/shifts/{id}", async Task<Results<Ok<Shift>, NotFound>> (int id, Shiftdb db) =>
-{
-    var targetShift = await db.Shifts.FindAsync(id);
-
-    // tutorial code with newer syntax 
-    /*
-    return targetShift == null
-        ? TypedResults.NotFound()
-        : TypedResults.Ok(targetShift);
-    */ 
-    if (targetShift == null)
-    {
-        return TypedResults.NotFound();
-    } else
-    {
-        return TypedResults.Ok(targetShift);
-    }
-});
-
-
-// POST endpoint should add a shift
-app.MapPost("/shifts", async (Shift shift, Shiftdb db) =>
-{
-    db.Shifts.Add(shift);
-    await db.SaveChangesAsync();
-
-    // might need to add $ here 
-    return TypedResults.Created("/shifts/{shift.id}", shift);
-});
-
-
-// Delete Endpoint 
-app.MapDelete("/shifts/{id}", async Results<NoContent, NotFound> (int id, Shiftdb db) =>
-{
-    var targetShift = await db.Shifts.FindAsync(id);
-
-    if (targetShift == null)
-    {
-        return TypedResults.NotFound();
-    } else
-    {
-        db.Shifts.Remove(targetShift);
-        await db.SaveChangesAsync();
-        return TypedResults.NoContent();
-    }
-});
-
-
-app.Run();
