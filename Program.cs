@@ -9,18 +9,90 @@
 // Reference: https://thecsharpacademy.com/project/18/ecommerce-api
 // ============================================================
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<Shiftdb>(opt =>
+builder.Services.AddDbContext<EcomDb>(opt =>
 {
     opt.UseSqlite("EcomDb.db");
 });
 
 var app = builder.Build();
 
+// GET all products
+
+// GET a specific product by its Id
+
+// POST or create a product 
+
+// PUT or update a product  
+
+// soft delete a product
+
+// GET all sales 
+
+// GET a specific sale by ID
+
+// POST or create a sale in the table
+
+// PUT or update a sale
+
+// soft delete a sale
+
+// GET all categories
+
+// Get a specific category by Id
+
+// POST or create a category
+
+// PUT or update a category
+
+// DELETE a category
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // GET endpoint on parent directory should return list of Shifts 
-app.MapGet("/shifts/", async (Shiftdb db) => 
+app.MapGet("/shifts/", async (EcomDb db) => 
     await db.Shifts.ToListAsync());
 
 // GET endpoint gets specific shift object 

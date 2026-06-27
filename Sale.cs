@@ -8,4 +8,6 @@ public class Sale
     public List<Product> Products { get; } = new List<Product>();
 
     public int CardType{get; set;}
+
+    public bool IsDeleted{get; set;}
 }
