@@ -1,15 +1,11 @@
 // class for Products table
-
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.Net.Http.Headers;
-
 public class Product
 {
     public int Id{get; set;}
 
     public int Amt{get; set;}
 
-    public int Name{get; set;}
+    public string Name{get; set;}
 
     public decimal Price{get; set;}
 
@@ -18,7 +14,7 @@ public class Product
 
     // foreign key
     public int CategoryId { get; set; }       
-    public required Category Category { get; set; }    
+    public Category Category { get; set; }    
 
 
     // setting up many to many

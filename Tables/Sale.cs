@@ -7,7 +7,7 @@ public class Sale
     // setting up the many to many
     public List<Product> Products { get; } = new List<Product>();
 
-    public int CardType{get; set;}
+    public string CardType{get; set;}
 
     public bool IsDeleted{get; set;} = false;
 }

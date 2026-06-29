@@ -15,10 +15,15 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<EcomDb>(opt =>
 {
-    opt.UseSqlite("EcomDb.db");
+    opt.UseSqlite("Data Source=EcomDb.db");
 });
 
 var app = builder.Build();
+
+// create tables in a scoped ENV
+using var scope = app.Services.CreateScope();
+var db = scope.ServiceProvider.GetRequiredService<EcomDb>();
+db.Database.EnsureCreated(); 
 
 // GET all products
 // pagnation capabilites
@@ -27,6 +32,8 @@ app.MapGet("/products/", async (EcomDb db, int page=1, int pageSize=10 ) =>
 {
     var products = await db.Products 
     .Where(p => !p.IsDeleted) 
+    .Include(p => p.Category)
+    .Include(p => p.Sales)
     .Skip((page - 1) * pageSize)
     .Take(pageSize)
     .ToListAsync();
@@ -35,29 +42,50 @@ app.MapGet("/products/", async (EcomDb db, int page=1, int pageSize=10 ) =>
     .Where(p => !p.IsDeleted)
     .CountAsync();
 
-    PageResult<Product> pageR = new PageResult<Product>
+    PageResult<ProductResponseDto> pageR = new PageResult<ProductResponseDto>
     {
         TotalCount = totalCount,
         Page = page,
         PageSize = pageSize,
         TotalPages = (int) Math.Ceiling((double) totalCount/ pageSize),
-        Data = products
+        Data = products.Select(p => new ProductResponseDto
+        {
+            Id = p.Id,
+            Name = p.Name,
+            Price = p.Price,
+            Amt = p.Amt,
+            CategoryName = p.Category?.Name,
+            SaleIds = p.Sales.Select(s => s.Id).ToList()
+        }).ToList()
+
+
 
     };
 
-    return TypedResults.Ok();
+    return TypedResults.Ok(pageR);
 });
 
 // GET a specific product by its Id
-app.MapGet("/products/{id}", async Task<Results<Ok<Product>, NotFound>> (EcomDb db, int id) =>
+app.MapGet("/products/{id}", async Task<Results<Ok<ProductResponseDto>, NotFound>> (EcomDb db, int id) =>
 {
-    var targetProduct = await db.Products.FindAsync(id);
+    var targetProduct = await db.Products
+    .Include(p => p.Category)
+    .Include(p => p.Sales)
+    .FirstOrDefaultAsync(p => p.Id == id);
 
     if (targetProduct== null) {
         return TypedResults.NotFound();
     } else
     {
-        return TypedResults.Ok(targetProduct);
+        return TypedResults.Ok(new ProductResponseDto
+        {
+            Id = targetProduct.Id,
+            Name = targetProduct.Name,
+            Price = targetProduct.Price,
+            Amt = targetProduct.Amt,
+            CategoryName = targetProduct.Category?.Name,
+            SaleIds = targetProduct.Sales.Select(s => s.Id).ToList()
+        });
     }
 });
 
@@ -115,43 +143,67 @@ app.MapGet("/sales/", async (EcomDb db, int page=1, int pageSize=10 ) =>
 {
     var sales = await db.Sales 
     .Where(p => !p.IsDeleted) 
+    .Include(p => p.Products)
     .Skip((page - 1) * pageSize)
     .Take(pageSize)
     .ToListAsync();
 
-    var totalCount = await db.Products
+    var totalCount = await db.Sales
     .Where(p => !p.IsDeleted)
     .CountAsync();
 
-    PageResult<Sale> pageR = new PageResult<Sale>
+    PageResult<SaleResponseDTO> pageR = new PageResult<SaleResponseDTO>
     {
         TotalCount = totalCount,
         Page = page,
         PageSize = pageSize,
         TotalPages = (int) Math.Ceiling((double) totalCount/ pageSize),
-        Data = sales
+        Data = sales.Select(p => new SaleResponseDTO
+        {
+            Id = p.Id,
+            CardType = p.CardType,
+            Products = p.Products.Select(x => new SaleProductDTO
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Price = x.Price,
+                Amt = x.Amt
+            }).ToList()
+        }).ToList()
 
     };
 
-    return TypedResults.Ok();
+    return TypedResults.Ok(pageR);
 }
 );
 
 // GET a specific sale by ID
-app.MapGet("/sales/{id}", async Task<Results<Ok<Sale>, NotFound>> (EcomDb db, int id) =>
+app.MapGet("/sales/{id}", async Task<Results<Ok<SaleResponseDTO>, NotFound>> (EcomDb db, int id) =>
 {
-    var targetSale = await db.Sales.FindAsync(id);
+    var targetSale = await db.Sales
+    .Include(p => p.Products)
+    .FirstOrDefaultAsync(p => p.Id == id);
 
     if (targetSale == null) {
         return TypedResults.NotFound();
     } else
     {
-        return TypedResults.Ok(targetSale);
-    }
+        return TypedResults.Ok(new SaleResponseDTO
+        {
+            Id = targetSale.Id,
+            CardType = targetSale.CardType,
+            Products = targetSale.Products.Select(x => new SaleProductDTO
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Price = x.Price,
+                Amt = x.Amt
+            }).ToList()
+        });
+    };
 });
 
 // POST or create a sale in the table
-// might not capture many to many correclty>>>?????????????????????????!!!!
 app.MapPost("/sales/", async (EcomDb db, Sale sale) =>
 {
     db.Sales.Add(sale);
@@ -195,9 +247,10 @@ app.MapDelete("/sales/{id}", async Task<Results<NoContent, NotFound>> (EcomDb db
 });
 
 // GET all categories
-app.MapGet("/categories/", async (EcomDb db, int page=1, int pageSize=10 ) =>
+app.MapGet("/category/", async (EcomDb db, int page=1, int pageSize=10 ) =>
 {
     var categories = await db.Categories
+    .Include(p => p.Products)
     .Skip((page - 1) * pageSize)
     .Take(pageSize)
     .ToListAsync();
@@ -205,30 +258,42 @@ app.MapGet("/categories/", async (EcomDb db, int page=1, int pageSize=10 ) =>
     var totalCount = await db.Categories
     .CountAsync();
 
-    PageResult<Category> pageR = new PageResult<Category>
+    PageResult<CategoryResponseDTO> pageR = new PageResult<CategoryResponseDTO>
     {
         TotalCount = totalCount,
         Page = page,
         PageSize = pageSize,
         TotalPages = (int) Math.Ceiling((double) totalCount/ pageSize),
-        Data = categories
+        Data = categories.Select(p => new CategoryResponseDTO
+        {
+            Id = p.Id,
+            Name = p.Name,
+            ProductNames = p.Products.Select(p => p.Name).ToList()
+        }).ToList()
 
     };
 
-    return TypedResults.Ok();
+    return TypedResults.Ok(pageR);
 }
 );
 
 // Get a specific category by Id
-app.MapGet("/categories/{id}", async Task<Results<Ok<Category>, NotFound>> (EcomDb db, int id) =>
+app.MapGet("/category/{id}", async Task<Results<Ok<CategoryResponseDTO>, NotFound>> (EcomDb db, int id) =>
 {
-    var targetCat = await db.Categories.FindAsync(id);
+    var targetCat = await db.Categories
+    .Include(p => p.Products)
+    .FirstOrDefaultAsync(p => p.Id == id);
 
     if (targetCat == null) {
         return TypedResults.NotFound();
     } else
     {
-        return TypedResults.Ok(targetCat);
+        return TypedResults.Ok(new CategoryResponseDTO
+        {
+            Id = targetCat.Id,
+            Name = targetCat.Name,
+            ProductNames = targetCat.Products.Select(p => p.Name).ToList()
+        });
     }
 });
 
@@ -260,16 +325,18 @@ app.MapPut("/category/{id}", async Task<Results<Ok<Category>, NotFound>> (EcomDb
 });
 
 // DELETE a category
-app.MapDelete("/categories/{id}", async Task<Results<NoContent, NotFound>> (EcomDb db, int id) =>
+app.MapDelete("/category/{id}", async Task<Results<NoContent, NotFound>> (EcomDb db, int id) =>
 {
-   var targetSale =  await db.Categories.FindAsync(id); 
-   if (targetSale == null)
+   var targetCat =  await db.Categories.FindAsync(id); 
+   if (targetCat == null)
     {
         return TypedResults.NotFound();
     } else
     {
-        db.Remove(id);
+        db.Remove(targetCat);
         await db.SaveChangesAsync();
         return TypedResults.NoContent();
     }
 });
+
+app.Run();

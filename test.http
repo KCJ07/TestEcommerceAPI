@@ -1,0 +1,203 @@
+### =====================
+### CATEGORIES
+### =====================
+
+### POST create a category
+POST http://localhost:5041/category/
+Content-Type: application/json
+
+{
+    "name": "Fruit"
+}
+
+### POST create another category
+POST http://localhost:5041/category/
+Content-Type: application/json
+
+{
+    "name": "Dairy"
+}
+
+### GET all categories
+GET http://localhost:5041/category/
+Content-Type: application/json
+
+### GET all categories page 2
+GET http://localhost:5041/category/?page=2&pageSize=1
+Content-Type: application/json
+
+### GET a specific category
+GET http://localhost:5041/category/1
+Content-Type: application/json
+
+### GET a category that doesnt exist
+GET http://localhost:5041/category/9999
+Content-Type: application/json
+
+### PUT update a category
+PUT http://localhost:5041/category/1
+Content-Type: application/json
+
+{
+    "name": "Fresh Fruit"
+}
+
+### DELETE delete a category
+DELETE http://localhost:5041/category/1
+Content-Type: application/json
+
+
+### =====================
+### PRODUCTS
+### =====================
+
+### POST create a product
+POST http://localhost:5041/products/
+Content-Type: application/json
+
+{
+    "name": "Apple",
+    "price": 0.99,
+    "amt": 100,
+    "categoryId": 1
+}
+
+### POST create another product
+POST http://localhost:5041/products/
+Content-Type: application/json
+
+{
+    "name": "Banana",
+    "price": 0.50,
+    "amt": 50,
+    "categoryId": 6
+}
+
+### POST create a third product
+POST http://localhost:5041/products/
+Content-Type: application/json
+
+{
+    "name": "Milk",
+    "price": 1.50,
+    "amt": 30,
+    "categoryId": 6
+}
+
+### GET all products
+GET http://localhost:5041/products/
+Content-Type: application/json
+
+### GET all products page 2
+GET http://localhost:5041/products/?page=2&pageSize=1
+Content-Type: application/json
+
+### GET a specific product
+GET http://localhost:5041/products/1
+Content-Type: application/json
+
+### GET a product that doesnt exist
+GET http://localhost:5041/products/9999
+Content-Type: application/json
+
+### PUT update a product
+PUT http://localhost:5041/products/1
+Content-Type: application/json
+
+{
+    "name": "Green Apple",
+    "amt": 150,
+    "categoryId": 6
+}
+
+### PUT update a product that doesnt exist
+PUT http://localhost:5041/products/9999
+Content-Type: application/json
+
+{
+    "name": "Ghost Product",
+    "amt": 0,
+    "categoryId": 1
+}
+
+### DELETE soft delete a product
+DELETE http://localhost:5041/products/1
+Content-Type: application/json
+
+### DELETE a product that doesnt exist
+DELETE http://localhost:5041/products/9999
+Content-Type: application/json
+
+### GET verify soft deleted product doesnt appear in list
+GET http://localhost:5041/products/
+Content-Type: application/json
+
+### GET verify soft deleted product directly
+GET http://localhost:5041/products/1
+Content-Type: application/json
+
+### =====================
+### SALES
+### =====================
+
+### POST create a sale
+POST http://localhost:5041/sales/
+Content-Type: application/json
+
+{
+    "cardType": "Visa",
+    "productIds": [2, 3, 9]
+}
+
+### POST create another sale
+POST http://localhost:5041/sales/
+Content-Type: application/json
+
+{
+    "cardType": "Mastercard",
+    "productIds": [2]
+}
+
+### GET all sales
+GET http://localhost:5041/sales/
+Content-Type: application/json
+
+### GET all sales page 2
+GET http://localhost:5041/sales/?page=2&pageSize=1
+Content-Type: application/json
+
+### GET a specific sale
+GET http://localhost:5041/sales/1
+Content-Type: application/json
+
+### GET a sale that doesnt exist
+GET http://localhost:5041/sales/9999
+Content-Type: application/json
+
+### PUT update a sale
+PUT http://localhost:5041/sales/1
+Content-Type: application/json
+
+{
+    "cardType": "Amex"
+}
+
+### PUT update a sale that doesnt exist
+PUT http://localhost:5041/sales/9999
+Content-Type: application/json
+
+{
+    "cardType": "Amex"
+}
+
+### DELETE soft delete a sale
+DELETE http://localhost:5041/sales/1
+Content-Type: application/json
+
+### DELETE a sale that doesnt exist
+DELETE http://localhost:5041/sales/9999
+Content-Type: application/json
+
+### GET verify soft deleted sale doesnt appear
+GET http://localhost:5041/sales/
+Content-Type: application/json
