@@ -1,0 +1,905 @@
+{
+  "info": {
+    "_postman_id": "92307ac2-5b4f-4716-b762-0bf7e00d0dbd",
+    "name": "EcommerceAPI",
+    "description": "Postman collection for the EcommerceAPI - manages Products, Categories, and Sales with a many-to-many relationship between Products and Sales.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "56238004",
+    "_collection_link": "https://go.postman.co/collection/56238004-92307ac2-5b4f-4716-b762-0bf7e00d0dbd?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "POST create a category",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Fruit\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5041/category/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "category",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST create another category",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Dairy\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5041/category/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "category",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET all categories",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5041/category/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "category",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET all categories page 2",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5041/category/?page=2&pageSize=1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "category",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "2"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET a specific category",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5041/category/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "category",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET a category that doesnt exist",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5041/category/9999",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "category",
+                "9999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT update a category",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Fresh Fruit\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5041/category/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "category",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE delete a category",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5041/category/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "category",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "POST create a product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Apple\",\n    \"price\": 0.99,\n    \"amt\": 100,\n    \"categoryId\": 2\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5041/products/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "products",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST create another product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Banana\",\n    \"price\": 0.50,\n    \"amt\": 50,\n    \"categoryId\": 2\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5041/products/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "products",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST create a third product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Milk\",\n    \"price\": 1.50,\n    \"amt\": 30,\n    \"categoryId\": 2\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5041/products/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "products",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET all products",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5041/products/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "products",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET all products page 2",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5041/products/?page=2&pageSize=1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "products",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "2"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET a specific product",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5041/products/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "products",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET a product that doesnt exist",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5041/products/9999",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "products",
+                "9999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT update a product",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Green Apple\",\n    \"amt\": 150,\n    \"categoryId\": 2\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5041/products/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "products",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT update a product that doesnt exist",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Ghost Product\",\n    \"amt\": 0,\n    \"categoryId\": 1\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5041/products/9999",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "products",
+                "9999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE soft delete a product",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5041/products/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "products",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE a product that doesnt exist",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5041/products/9999",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "products",
+                "9999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET verify soft deleted product doesnt appear in list",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5041/products/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "products",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET verify soft deleted product directly",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5041/products/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "products",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Sales",
+      "item": [
+        {
+          "name": "POST create a sale",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"cardType\": \"Visa\",\n    \"productIds\": [2, 3]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5041/sales/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "sales",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST create another sale",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"cardType\": \"Mastercard\",\n    \"productIds\": [2]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5041/sales/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "sales",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET all sales",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5041/sales/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "sales",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET all sales page 2",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5041/sales/?page=2&pageSize=1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "sales",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "2"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET a specific sale",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5041/sales/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "sales",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET a sale that doesnt exist",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5041/sales/9999",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "sales",
+                "9999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT update a sale",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"cardType\": \"Amex\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5041/sales/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "sales",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT update a sale that doesnt exist",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"cardType\": \"Amex\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5041/sales/9999",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "sales",
+                "9999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE soft delete a sale",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5041/sales/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "sales",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE a sale that doesnt exist",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5041/sales/9999",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "sales",
+                "9999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET verify soft deleted sale doesnt appear",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5041/sales/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5041",
+              "path": [
+                "sales",
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
