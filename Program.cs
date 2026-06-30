@@ -203,13 +203,24 @@ app.MapGet("/sales/{id}", async Task<Results<Ok<SaleResponseDTO>, NotFound>> (Ec
     };
 });
 
+// need to debug
 // POST or create a sale in the table
-app.MapPost("/sales/", async (EcomDb db, Sale sale) =>
+app.MapPost("/sales/", async (EcomDb db, CreateSaleDTO newSale) =>
 {
+    var products = await db.Products
+        .Where(p => newSale.ProductIds.Contains(p.Id))
+        .ToListAsync();
+
+    var sale = new Sale()
+    {
+        CardType = newSale.CardType,  // ← also from the DTO
+        IsDeleted = false
+    };
+
+    sale.Products.AddRange(products);
+
     db.Sales.Add(sale);
     await db.SaveChangesAsync();
-
-    return TypedResults.Created($"/Products/{sale.Id}", sale);
 });
 
 
